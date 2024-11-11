@@ -69,19 +69,21 @@ def coletar_dados_idoso():
     enderecoIdoso = input("Endereço: ")
 
     print("\nInformações sobre dificuldades e cuidados")
-    mobilidadeIdoso = input("O idoso precisa de ajuda para andar? (S/N): ")
-    obesidadeIdoso = input("O idoso é obeso? (S/N): ")
-    deficienciaIdoso = input("O idoso possui alguma deficiência física? (S/N): ")
+    
+    def validar_resposta(pergunta):
+        resposta = input(pergunta).strip().lower()
+        return "Sim" if resposta == "s" else "Não"
 
-    dificuldadesVisuaisIdoso = input("O idoso possui dificuldades visuais? (S/N): ")
-    dificuldadesAuditivasIdoso = input("O idoso possui dificuldades auditivas? (S/N): ")
-    usoMedicamentosIdoso = input("O idoso faz uso de medicamentos diários? (S/N): ")
-
-    alimentacaoAssistidaIdoso = input("O idoso precisa de ajuda para se alimentar? (S/N): ")
-    higieneAssistidaIdoso = input("O idoso precisa de ajuda para higiene pessoal? (S/N): ")
-    possuiAlergiasIdoso = input("O idoso possui alergias? (S/N): ")
-
-    condicaoMedicaIdoso = input("O idoso possui alguma condição médica grave? (S/N): ")
+    mobilidadeIdoso = validar_resposta("O idoso precisa de ajuda para andar? (S/N): ")
+    obesidadeIdoso = validar_resposta("O idoso é obeso? (S/N): ")
+    deficienciaIdoso = validar_resposta("O idoso possui alguma deficiência física? (S/N): ")
+    dificuldadesVisuaisIdoso = validar_resposta("O idoso possui dificuldades visuais? (S/N): ")
+    dificuldadesAuditivasIdoso = validar_resposta("O idoso possui dificuldades auditivas? (S/N): ")
+    usoMedicamentosIdoso = validar_resposta("O idoso faz uso de medicamentos diários? (S/N): ")
+    alimentacaoAssistidaIdoso = validar_resposta("O idoso precisa de ajuda para se alimentar? (S/N): ")
+    higieneAssistidaIdoso = validar_resposta("O idoso precisa de ajuda para higiene pessoal? (S/N): ")
+    possuiAlergiasIdoso = validar_resposta("O idoso possui alergias? (S/N): ")
+    condicaoMedicaIdoso = validar_resposta("O idoso possui alguma condição médica grave? (S/N): ")
 
     # Resumo das informações coletadas
     print("\nResumo das Informações do Idoso")
@@ -90,16 +92,16 @@ def coletar_dados_idoso():
     print(f"Sexo: {sexoIdoso}")
     print(f"Telefone de contato: {contatoIdoso}")
     print(f"Endereço: {enderecoIdoso}")
-    print(f"Ajuda para andar: {'Sim' if mobilidadeIdoso.upper() == 'S' else 'Não'}")
-    print(f"Obesidade: {'Sim' if obesidadeIdoso.upper() == 'S' else 'Não'}")
-    print(f"Deficiência física: {'Sim' if deficienciaIdoso.upper() == 'S' else 'Não'}")
-    print(f"Dificuldades visuais: {'Sim' if dificuldadesVisuaisIdoso.upper() == 'S' else 'Não'}")
-    print(f"Dificuldades auditivas: {'Sim' if dificuldadesAuditivasIdoso.upper() == 'S' else 'Não'}")
-    print(f"Uso de medicamentos: {'Sim' if usoMedicamentosIdoso.upper() == 'S' else 'Não'}")
-    print(f"Ajuda para se alimentar: {'Sim' if alimentacaoAssistidaIdoso.upper() == 'S' else 'Não'}")
-    print(f"Ajuda para higiene pessoal: {'Sim' if higieneAssistidaIdoso.upper() == 'S' else 'Não'}")
-    print(f"Alergias: {'Sim' if possuiAlergiasIdoso.upper() == 'S' else 'Não'}")
-    print(f"Condição médica grave: {'Sim' if condicaoMedicaIdoso.upper() == 'S' else 'Não'}")
+    print(f"Ajuda para andar: {mobilidadeIdoso}")
+    print(f"Obesidade: {obesidadeIdoso}")
+    print(f"Deficiência física: {deficienciaIdoso}")
+    print(f"Dificuldades visuais: {dificuldadesVisuaisIdoso}")
+    print(f"Dificuldades auditivas: {dificuldadesAuditivasIdoso}")
+    print(f"Uso de medicamentos: {usoMedicamentosIdoso}")
+    print(f"Ajuda para se alimentar: {alimentacaoAssistidaIdoso}")
+    print(f"Ajuda para higiene pessoal: {higieneAssistidaIdoso}")
+    print(f"Alergias: {possuiAlergiasIdoso}")
+    print(f"Condição médica grave: {condicaoMedicaIdoso}")
 
     dadosIdoso = {
         "nomeIdoso": nomeIdoso,
@@ -122,7 +124,6 @@ def coletar_dados_idoso():
     print("\nInformações coletadas com sucesso!")
     return dadosIdoso
 
-
 def coletar_dados_cuidador():
     print("\nCadastro do cuidador no aplicativo FamilyCare.")
 
@@ -131,28 +132,27 @@ def coletar_dados_cuidador():
     sexoCuidador = input("Sexo (M/F): ")
     sexoValido = False
 
-    while sexoValido == False:
-        if sexoCuidador == "m" or sexoCuidador =="M":
+    while not sexoValido:
+        if sexoCuidador.lower() == "m":
             sexoCuidador = "Masculino"
             sexoValido = True
-        elif sexoCuidador == "f" or sexoCuidador =="F":
+        elif sexoCuidador.lower() == "f":
             sexoCuidador = "Feminino"
             sexoValido = True
         else:
-            sexoCuidador = input("Adicione um sexo válido (M/F):")
+            sexoCuidador = input("Adicione um sexo válido (M/F): ")
 
     contatoCuidador = input("Telefone de contato: ")
     enderecoCuidador = input("Endereço: ")
 
     print("\nInformações sobre habilidades e capacidades")
-    mobilidadeCuidador = input("O cuidador tem capacidade de carregar o idoso, se necessário? (S/N): ")
-    obesidadeCuidador = input("O cuidador tem capacidade de trabalhar com idosos com obesidade? (S/N): ")
-    deficienciaCuidador = input("O cuidador tem capacidade de trabalhar com idosos deficientes? (S/N): ")
-
-    dificuldadesVisuaisCuidador = input("O cuidador tem capacidade de trabalhar com idosos com dificuldades visuais? (S/N): ")
-    dificuldadesAuditivasCuidador = input("O cuidador tem capacidade de trabalhar com idosos com dificuldades auditivas? (S/N): ")
-
-    condicaoMedicaCuidador = input("O cuidador tem capacidade de trabalhar com idosos com condições médicas graves? (S/N): ")
+    mobilidadeCuidador = "Sim" if input("O cuidador tem capacidade de carregar o idoso, se necessário? (S/N): ").upper() == "S" else "Não"
+    obesidadeCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos com obesidade? (S/N): ").upper() == "S" else "Não"
+    deficienciaCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos deficientes? (S/N): ").upper() == "S" else "Não"
+    
+    dificuldadesVisuaisCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos com dificuldades visuais? (S/N): ").upper() == "S" else "Não"
+    dificuldadesAuditivasCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos com dificuldades auditivas? (S/N): ").upper() == "S" else "Não"
+    condicaoMedicaCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos com condições médicas graves? (S/N): ").upper() == "S" else "Não"
 
     # Resumo das informações coletadas
     print("\nResumo das Informações do Cuidador")
@@ -161,13 +161,13 @@ def coletar_dados_cuidador():
     print(f"Sexo: {sexoCuidador}")
     print(f"Telefone de contato: {contatoCuidador}")
     print(f"Endereço: {enderecoCuidador}")
-    print(f"Capaz de auxiliar o idoso a andar: {'Sim' if mobilidadeCuidador.upper() == 'S' else 'Não'}")
-    print(f"Capaz de lidar com idosos com obesidade: {'Sim' if obesidadeCuidador.upper() == 'S' else 'Não'}")
-    print(f"Capaz de lidar com idosos com deficiência física: {'Sim' if deficienciaCuidador.upper() == 'S' else 'Não'}")
-    print(f"Capaz de lidar com idosos com dificuldades visuais: {'Sim' if dificuldadesVisuaisCuidador.upper() == 'S' else 'Não'}")
-    print(f"Capaz de lidar com idosos com dificuldades auditivas: {'Sim' if dificuldadesAuditivasCuidador.upper() == 'S' else 'Não'}")
-    print(f"Capaz de lidar com idosos com condição médica grave: {'Sim' if condicaoMedicaCuidador.upper() == 'S' else 'Não'}")
-    
+    print(f"Capaz de auxiliar o idoso a andar: {mobilidadeCuidador}")
+    print(f"Capaz de lidar com idosos com obesidade: {obesidadeCuidador}")
+    print(f"Capaz de lidar com idosos com deficiência física: {deficienciaCuidador}")
+    print(f"Capaz de lidar com idosos com dificuldades visuais: {dificuldadesVisuaisCuidador}")
+    print(f"Capaz de lidar com idosos com dificuldades auditivas: {dificuldadesAuditivasCuidador}")
+    print(f"Capaz de lidar com idosos com condição médica grave: {condicaoMedicaCuidador}")
+
     dadosCuidador = {
         "nomeCuidador": nomeCuidador,
         "idadeCuidador": idadeCuidador,
