@@ -3,6 +3,10 @@
 import sqlite3
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
+import hashlib
+
+def criptografar_senha(senha):
+    return hashlib.md5(senha.encode()).hexdigest()
 
 # Conexão com o banco de dados SQLite
 conn = sqlite3.connect('familycare.db')
@@ -26,7 +30,8 @@ cursor.execute('''
         alimentacaoAssistida TEXT,
         higieneAssistida TEXT,
         alergias TEXT,
-        condicaoMedica TEXT
+        condicaoMedica TEXT,
+        senha TEXT
     )
 ''')
 cursor.execute('''
@@ -42,7 +47,8 @@ cursor.execute('''
         deficiencia TEXT,
         dificuldadesVisuais TEXT,
         dificuldadesAuditivas TEXT,
-        condicaoMedica TEXT
+        condicaoMedica TEXT,
+        senha TEXT
     )
 ''')
 conn.commit()
@@ -67,6 +73,7 @@ def coletar_dados_idoso():
 
     contatoIdoso = input("Telefone de contato: ")
     enderecoIdoso = input("Endereço: ")
+    senhaIdoso = input("Crie uma senha: ")
 
     print("\nInformações sobre dificuldades e cuidados")
     
@@ -92,6 +99,7 @@ def coletar_dados_idoso():
     print(f"Sexo: {sexoIdoso}")
     print(f"Telefone de contato: {contatoIdoso}")
     print(f"Endereço: {enderecoIdoso}")
+    print(f"Senha: {senhaIdoso}")
     print(f"Ajuda para andar: {mobilidadeIdoso}")
     print(f"Obesidade: {obesidadeIdoso}")
     print(f"Deficiência física: {deficienciaIdoso}")
@@ -102,6 +110,8 @@ def coletar_dados_idoso():
     print(f"Ajuda para higiene pessoal: {higieneAssistidaIdoso}")
     print(f"Alergias: {possuiAlergiasIdoso}")
     print(f"Condição médica grave: {condicaoMedicaIdoso}")
+    
+    senha_hash_idoso = criptografar_senha(senhaIdoso)
 
     dadosIdoso = {
         "nomeIdoso": nomeIdoso,
@@ -109,6 +119,7 @@ def coletar_dados_idoso():
         "sexoIdoso": sexoIdoso,
         "contatoIdoso": contatoIdoso,
         "enderecoIdoso": enderecoIdoso,
+        "senhaIdoso": senha_hash_idoso,
         "mobilidadeIdoso": mobilidadeIdoso,
         "obesidadeIdoso": obesidadeIdoso,
         "deficienciaIdoso": deficienciaIdoso,
@@ -144,7 +155,8 @@ def coletar_dados_cuidador():
 
     contatoCuidador = input("Telefone de contato: ")
     enderecoCuidador = input("Endereço: ")
-
+    senhaCuidador = input("Crie uma senha: ")
+    
     print("\nInformações sobre habilidades e capacidades")
     mobilidadeCuidador = "Sim" if input("O cuidador tem capacidade de carregar o idoso, se necessário? (S/N): ").upper() == "S" else "Não"
     obesidadeCuidador = "Sim" if input("O cuidador tem capacidade de trabalhar com idosos com obesidade? (S/N): ").upper() == "S" else "Não"
@@ -167,6 +179,8 @@ def coletar_dados_cuidador():
     print(f"Capaz de lidar com idosos com dificuldades visuais: {dificuldadesVisuaisCuidador}")
     print(f"Capaz de lidar com idosos com dificuldades auditivas: {dificuldadesAuditivasCuidador}")
     print(f"Capaz de lidar com idosos com condição médica grave: {condicaoMedicaCuidador}")
+    
+    senha_hash_cuidador = criptografar_senha(senhaCuidador)
 
     dadosCuidador = {
         "nomeCuidador": nomeCuidador,
@@ -174,6 +188,7 @@ def coletar_dados_cuidador():
         "sexoCuidador": sexoCuidador,
         "contatoCuidador": contatoCuidador,
         "enderecoCuidador": enderecoCuidador,
+        "senhaCuidador" : senha_hash_cuidador,
         "mobilidadeCuidador": mobilidadeCuidador,
         "obesidadeCuidador": obesidadeCuidador,
         "deficienciaCuidador": deficienciaCuidador,
@@ -191,13 +206,13 @@ def salvar_dados_idoso(dadosIdoso):
     cursor.execute('''
         INSERT INTO Idosos (nome, idade, sexo, contato, endereco, mobilidade, obesidade, deficiencia,
                             dificuldadesVisuais, dificuldadesAuditivas, usoMedicamentos, alimentacaoAssistida,
-                            higieneAssistida, alergias, condicaoMedica)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            higieneAssistida, alergias, condicaoMedica, senha)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (dadosIdoso["nomeIdoso"], dadosIdoso["idadeIdoso"], dadosIdoso["sexoIdoso"], dadosIdoso["contatoIdoso"],
           dadosIdoso["enderecoIdoso"], dadosIdoso["mobilidadeIdoso"], dadosIdoso["obesidadeIdoso"], dadosIdoso["deficienciaIdoso"],
           dadosIdoso["dificuldadesVisuaisIdoso"], dadosIdoso["dificuldadesAuditivasIdoso"], dadosIdoso["usoMedicamentosIdoso"],
           dadosIdoso["alimentacaoAssistidaIdoso"], dadosIdoso["higieneAssistidaIdoso"], dadosIdoso["possuiAlergiasIdoso"],
-          dadosIdoso["condicaoMedicaIdoso"]))
+          dadosIdoso["condicaoMedicaIdoso"], dadosIdoso["senhaIdoso"]))
     conn.commit()
     conn.close()
     print("Dados do idoso salvos com sucesso!")
@@ -207,11 +222,11 @@ def salvar_dados_cuidador(dadosCuidador):
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO Cuidadores (nome, idade, sexo, contato, endereco, mobilidade, obesidade, deficiencia,
-                                dificuldadesVisuais, dificuldadesAuditivas, condicaoMedica)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                dificuldadesVisuais, dificuldadesAuditivas, condicaoMedica, senha)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (dadosCuidador["nomeCuidador"], dadosCuidador["idadeCuidador"], dadosCuidador["sexoCuidador"], dadosCuidador["contatoCuidador"],
           dadosCuidador["enderecoCuidador"], dadosCuidador["mobilidadeCuidador"], dadosCuidador["obesidadeCuidador"], dadosCuidador["deficienciaCuidador"],
-          dadosCuidador["dificuldadesVisuaisCuidador"], dadosCuidador["dificuldadesAuditivasCuidador"], dadosCuidador["condicaoMedicaCuidador"]))
+          dadosCuidador["dificuldadesVisuaisCuidador"], dadosCuidador["dificuldadesAuditivasCuidador"], dadosCuidador["condicaoMedicaCuidador"], dadosCuidador["senhaCuidador"]))
     conn.commit()
     conn.close()
     print("Dados do cuidador salvos com sucesso!")
